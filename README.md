@@ -4,48 +4,68 @@
 
 Jashn is a GenAI-powered event planning companion engineered for Indian weddings, birthdays, and community gatherings. Users describe their celebration once; Jashn produces an exact rupee budget, a dated milestone timeline, a vendor checklist with vetting questions, and curated inspiration—then functions as an active working planner (track spend, tick tasks, simulate budget rebalances, export to calendar, and ask context-aware questions).
 
-Services & Technologies Used
+# Jashn (जश्न)
 
-🤖 Generative AI & AI Services
+> ### **Plan the celebration, not the stress.**
 
-Google Gemini API – Primary Generative AI service used to generate personalized event plans, budget recommendations, timelines, vendor vetting questions, and creative event ideas.
+**Jashn** is a GenAI-powered event planning companion engineered for Indian weddings, birthdays, and community gatherings.
 
-Groq API / Llama 3.3 – Alternative LLM inference provider for fast AI responses and resilient fallback support.
+Describe your celebration once, and Jashn helps create a structured plan with an **exact rupee budget, dated milestone timeline, vendor checklist, vetting questions, and curated inspiration**. It then becomes an active planning workspace where you can track spending, manage tasks, rebalance budgets, export events to your calendar, and ask context-aware questions.
 
-Google Antigravity – Used as an AI-assisted development environment for rapid prototyping, feature development, code iteration, and improving the overall application experience.
+---
 
-💻 Application & Backend
+## Services & Technologies
 
-Next.js – Full-stack framework powering the web application and secure server-side API routes.
+### Generative AI
 
-TypeScript – Used for type-safe application and business logic development.
+| Service | How It's Used |
+|---|---|
+| **Google Gemini API** | Primary Generative AI service for personalized event plans, budget recommendations, timelines, vendor questions, and creative ideas. |
+| **Groq API / Llama 3.3** | Alternative LLM inference provider for fast responses and resilient fallback support. |
+| **Google Antigravity** | AI-assisted development environment used for rapid prototyping, feature development, code iteration, and application refinement. |
 
-Zod – Validates user inputs and AI-generated structured JSON responses.
+### Application & Backend
 
-⚙️ Planning & Processing Engine
+| Technology | Purpose |
+|---|---|
+| **Next.js** | Full-stack framework powering the web application and secure server-side API routes. |
+| **TypeScript** | Type-safe application development and business logic. |
+| **Zod** | Validates user inputs and AI-generated structured JSON responses. |
 
-Deterministic TypeScript Engines – Handle exact budget allocation, percentage normalization, timeline calculations, and calendar scheduling.
+### Planning & Processing
 
-RFC 5545 iCalendar Export – Generates .ics files for exporting event milestones to calendar applications.
+| Component | Purpose |
+|---|---|
+| **Deterministic Engines** | Handles exact budget allocation, percentage normalization, and timeline calculations. |
+| **RFC 5545 iCalendar** | Generates `.ics` files for exporting event milestones to calendar applications. |
 
-💾 Data & Storage
+### Data & Storage
 
-Browser LocalStorage – Stores event plans and user progress locally.
+- **Browser LocalStorage** — Stores event plans and user progress locally.
+- **JSON Backup & Import/Export** — Enables users to back up and restore event planning data.
 
-JSON Backup & Import/Export – Enables users to back up and restore their event planning data.
+### Quality, Security & Reliability
 
-🧪 Quality, Security & Reliability
+- 🧪 **Jest** — Automated unit and integration testing.
+- ♿ **Accessibility Testing** — Designed to support WCAG 2.1 AA accessibility standards.
+- 🔒 **Server-Side API Security** — AI credentials remain protected on the server.
+- 🛡️ **Rate Limiting & Input Sanitization** — Helps protect APIs and validate incoming requests.
 
-Jest – Automated unit and integration testing.
+---
 
-Accessibility Testing – Supports WCAG 2.1 AA accessibility standards.
+## Architecture Philosophy
 
-Server-Side API Security – Keeps AI credentials protected and validates requests before processing.
+> **AI proposes. Deterministic code disposes.**
 
-Rate Limiting & Input Sanitization – Helps protect the AI APIs and application from excessive or unsafe requests.
+Generative AI brings **creativity and personalization** to the planning experience, while deterministic TypeScript engines handle **exact financial calculations and calendar scheduling**.
 
-Architecture Principle: AI proposes, deterministic code disposes. Generative AI drives creativity and personalization, while deterministic engines ensure accurate financial calculations and reliable calendar scheduling.
+This hybrid architecture combines the flexibility of AI with the accuracy and reliability required for real-world event planning.
 
+---
+
+### The Jashn Experience
+
+**Describe your event → AI creates a personalized plan → Deterministic engines ensure accuracy → Track, adjust, and celebrate.**
 ---
 
 ## The One-Sentence Product Loop
