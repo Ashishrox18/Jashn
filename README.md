@@ -1,9 +1,3 @@
-# Jashn (जश्न) — Event Planning Assistant
-
-> **Plan the celebration, not the stress.**
-
-Jashn is a GenAI-powered event planning companion engineered for Indian weddings, birthdays, and community gatherings. Users describe their celebration once; Jashn produces an exact rupee budget, a dated milestone timeline, a vendor checklist with vetting questions, and curated inspiration—then functions as an active working planner (track spend, tick tasks, simulate budget rebalances, export to calendar, and ask context-aware questions).
-
 # Jashn (जश्न)
 
 > ### **Plan the celebration, not the stress.**
