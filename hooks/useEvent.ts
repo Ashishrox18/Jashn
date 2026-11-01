@@ -145,6 +145,26 @@ export function useEvent(id: string) {
     [event, allocations, reload, showToast]
   );
 
+  const updateIdeas = useCallback(
+    (newIdeas: import('@/types').Idea[]) => {
+      if (!event) return;
+      const updatedRecord: EventRecord = {
+        ...event,
+        plan: {
+          ...event.plan,
+          ideas: newIdeas,
+        },
+      };
+
+      const res = saveEvent(updatedRecord);
+      if (res.success) {
+        reload();
+        showToast('Updated ideas saved to event plan!', 'success');
+      }
+    },
+    [event, reload, showToast]
+  );
+
   return {
     event,
     isLoaded,
@@ -158,6 +178,7 @@ export function useEvent(id: string) {
     toggleTask,
     setVendorCategoryStatus,
     applyBudgetRebalance,
+    updateIdeas,
     reload,
   };
 }

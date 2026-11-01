@@ -9,9 +9,12 @@ const storage = new Map<string, RateLimitRecord>();
 
 /**
  * In-memory sliding window rate limiter keyed on userId + client IP.
- * Allows up to 10 requests per minute.
+ * Allows up to 10 requests per minute by default (configurable per endpoint).
  */
-export function checkRateLimit(key: string): {
+export function checkRateLimit(
+  key: string,
+  maxRequests: number = maxRequestsPerWindow
+): {
   allowed: boolean;
   retryAfterSeconds: number;
   remaining: number;
@@ -33,11 +36,11 @@ export function checkRateLimit(key: string): {
     return {
       allowed: true,
       retryAfterSeconds: 0,
-      remaining: maxRequestsPerWindow - 1,
+      remaining: maxRequests - 1,
     };
   }
 
-  if (record.count >= maxRequestsPerWindow) {
+  if (record.count >= maxRequests) {
     const retryAfter = Math.max(1, Math.ceil((record.resetAtMs - now) / 1000));
     return {
       allowed: false,
@@ -50,7 +53,7 @@ export function checkRateLimit(key: string): {
   return {
     allowed: true,
     retryAfterSeconds: 0,
-    remaining: maxRequestsPerWindow - record.count,
+    remaining: maxRequests - record.count,
   };
 }
 

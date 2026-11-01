@@ -2,7 +2,7 @@
 
 import { useState, useCallback } from 'react';
 import { Brief, PlanResponse, IdeasResponse, AssistResponse } from '@/types';
-import { buildFallbackPlan } from '@/lib/fallbackPlan';
+import { buildFallbackPlan, buildFallbackIdeas, buildFallbackAssist } from '@/lib/fallbackPlan';
 import { getUserId } from '@/lib/storage';
 
 export function useAI() {
@@ -58,7 +58,7 @@ export function useAI() {
    * Refreshes ideas with user tweak.
    */
   const refreshIdeas = useCallback(
-    async (brief: Brief, tweak: string): Promise<IdeasResponse | null> => {
+    async (brief: Brief, tweak: string): Promise<IdeasResponse> => {
       setIsRefreshingIdeas(true);
       setError(null);
       const userId = getUserId();
@@ -71,15 +71,15 @@ export function useAI() {
         });
 
         if (!res.ok) {
-          setError('Unable to refresh ideas at this moment. Showing original suggestions.');
-          return null;
+          console.warn('API returned non-OK, using deterministic ideas fallback');
+          return buildFallbackIdeas(brief, tweak);
         }
 
         const data = (await res.json()) as IdeasResponse;
         return data;
-      } catch {
-        setError('Network error while refreshing ideas.');
-        return null;
+      } catch (err) {
+        console.warn('Network error while refreshing ideas, using fallback', err);
+        return buildFallbackIdeas(brief, tweak);
       } finally {
         setIsRefreshingIdeas(false);
       }
@@ -96,7 +96,7 @@ export function useAI() {
       brief: Brief,
       planSummary: string,
       spentTotalInr: number
-    ): Promise<AssistResponse | null> => {
+    ): Promise<AssistResponse> => {
       setIsAsking(true);
       setError(null);
       const userId = getUserId();
@@ -115,15 +115,15 @@ export function useAI() {
         });
 
         if (!res.ok) {
-          setError('Assistant is currently unavailable. Please try again.');
-          return null;
+          console.warn('API returned non-OK, using deterministic assist fallback');
+          return buildFallbackAssist(question, brief, planSummary, spentTotalInr);
         }
 
         const data = (await res.json()) as AssistResponse;
         return data;
-      } catch {
-        setError('Network error while consulting assistant.');
-        return null;
+      } catch (err) {
+        console.warn('Network error while consulting assistant, using fallback', err);
+        return buildFallbackAssist(question, brief, planSummary, spentTotalInr);
       } finally {
         setIsAsking(false);
       }

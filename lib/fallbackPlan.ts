@@ -1,4 +1,4 @@
-import { Brief, PlanResponse } from '@/types';
+import { Brief, PlanResponse, IdeasResponse, AssistResponse, Idea } from '@/types';
 
 /**
  * Builds a high-quality deterministic fallback plan when AI is unavailable or offline.
@@ -404,5 +404,256 @@ function buildCommunityFallback(brief: Brief): PlanResponse {
       { risk: 'Tripping hazard from temporary outdoor power cables', mitigation: 'Cover all ground wires with heavy-duty rubber cable ramps.' },
     ],
     confidence: 0.95,
+  };
+}
+
+/**
+ * Builds deterministic creative ideas when AI call is rate-limited or unavailable.
+ */
+export function buildFallbackIdeas(brief: Brief, tweak: string): IdeasResponse {
+  const tweakLower = (tweak || '').toLowerCase();
+  const isEco = tweakLower.includes('eco') || tweakLower.includes('green') || tweakLower.includes('waste');
+  const isBudget = tweakLower.includes('budget') || tweakLower.includes('cheap') || tweakLower.includes('low') || tweakLower.includes('save');
+  const isTraditional = tweakLower.includes('tradition') || tweakLower.includes('heritage') || tweakLower.includes('cultural') || tweakLower.includes('classic');
+
+  const budgetUnit = Math.round(brief.totalBudgetInr / 100);
+
+  let ideas: Idea[] = [];
+
+  if (isEco) {
+    ideas = [
+      {
+        type: 'decor',
+        title: 'Potted Herb & Brass Urli Centerpieces',
+        description: 'Living centerpieces featuring holy basil, mint, and local jasmine in reusable terracotta and brass vessels, gifted to guests at closing.',
+        estCostInr: budgetUnit * 2,
+      },
+      {
+        type: 'menu',
+        title: 'Zero-Waste Seasonal Live Counters',
+        description: 'Farm-to-table regional dishes served on compostable pressed areca nut leaves, with on-site segregated organic composting bins.',
+        estCostInr: budgetUnit * 5,
+      },
+      {
+        type: 'gift',
+        title: 'Plantable Seed-Paper Keepsakes',
+        description: 'Artisanal gift tags and sweets boxes embedded with marigold and wildflower seeds that guests can plant at home.',
+        estCostInr: budgetUnit * 1,
+      },
+      {
+        type: 'activity',
+        title: 'Community Tree Blessing & Memory Wall',
+        description: 'Guests tie cotton blessing threads around an auspicious venue tree and sign digital memory tablets instead of paper guestbooks.',
+        estCostInr: budgetUnit * 1,
+      },
+      {
+        type: 'theme',
+        title: 'Nature-Inspired Minimalist Elegance',
+        description: 'Earthy neutral tones, handloom khadi table runners, and warm fairy lights replacing single-use plastic installations.',
+        estCostInr: budgetUnit * 3,
+      },
+      {
+        type: 'entertainment',
+        title: 'Acoustic Folk & Classical Sitar Duo',
+        description: 'Low-amplification live classical music creating intimate ambiance while respecting sound conservation.',
+        estCostInr: budgetUnit * 2,
+      },
+    ];
+  } else if (isBudget) {
+    ideas = [
+      {
+        type: 'decor',
+        title: 'Fairy Light Canopy & Local Marigold Drapes',
+        description: 'High-impact, budget-friendly lighting using warm string bulbs and bulk local genda phool to create grand celebration photos.',
+        estCostInr: Math.round(budgetUnit * 1.5),
+      },
+      {
+        type: 'menu',
+        title: 'Curated 3-Course Regional Specialties',
+        description: 'Streamline menu to 4 blockbuster starters and authentic regional mains, cutting catering waste and reducing per-plate cost.',
+        estCostInr: budgetUnit * 4,
+      },
+      {
+        type: 'activity',
+        title: 'DIY Polaroid & QR Code Photo Corner',
+        description: 'A cozy decorated photo frame station with props where guests snap polaroids and upload directly to a shared family drive.',
+        estCostInr: Math.round(budgetUnit * 0.8),
+      },
+      {
+        type: 'entertainment',
+        title: 'Crowd-Sourced Celebration Playlist & Emcee Friend',
+        description: 'Curate a crowd-favorite high-energy playlist with a charismatic friend or family cousin acting as the evening host.',
+        estCostInr: 0,
+      },
+      {
+        type: 'gift',
+        title: 'Handmade Mithai or Artisanal Spice Jars',
+        description: 'Small branded glass jars of regional chai masala or freshly prepared pinni/laddoo wrapped in jute twine.',
+        estCostInr: Math.round(budgetUnit * 0.7),
+      },
+      {
+        type: 'theme',
+        title: 'Celebration of Lights & Colors',
+        description: 'Focus on color blocking with family dupattas, brass diyas, and candle clusters that feel luxurious without designer fees.',
+        estCostInr: budgetUnit * 1,
+      },
+    ];
+  } else if (isTraditional) {
+    ideas = [
+      {
+        type: 'theme',
+        title: 'Royal Heritage & Traditional Motifs',
+        description: 'Temple architecture arches, mogra garlands, and deep crimson and turmeric yellow fabrics evoking timeless Indian splendor.',
+        estCostInr: budgetUnit * 3,
+      },
+      {
+        type: 'menu',
+        title: 'Traditional Royal Thali Experience',
+        description: 'Authentic heritage banquet served with regional delicacies, live ghee rotis, and traditional warm jalebi rabdi counter.',
+        estCostInr: budgetUnit * 6,
+      },
+      {
+        type: 'entertainment',
+        title: 'Traditional Shehnai & Dhol Welcome',
+        description: 'Auspicious live shehnai notes at the entrance to welcome guests followed by spirited folk dhol performance.',
+        estCostInr: budgetUnit * 2,
+      },
+      {
+        type: 'decor',
+        title: 'Brass Diya Wall & Fresh Floral Mandap',
+        description: 'Grand backdrop composed of hundreds of flickering brass oil lamps and cascading fresh tuberose (rajnigandha).',
+        estCostInr: budgetUnit * 4,
+      },
+      {
+        type: 'activity',
+        title: 'Bangles & Mehendi Artisan Corner',
+        description: 'Dedicated live bangle-fitting stall and rapid mehendi artists offering personalized henna motifs to guests.',
+        estCostInr: budgetUnit * 1,
+      },
+      {
+        type: 'gift',
+        title: 'Silver Coin or Brass Keepsake in Brocade Pouch',
+        description: 'Auspicious souvenir enclosed in handcrafted Banarasi brocade potli with custom printed thank-you card.',
+        estCostInr: Math.round(budgetUnit * 1.5),
+      },
+    ];
+  } else {
+    ideas = [
+      {
+        type: 'theme',
+        title: 'Vibrant Celebration & Modern Indian Elegance',
+        description: 'Festive palette combining rich jewel tones with clean contemporary styling tailored to ' + brief.city + ' climate.',
+        estCostInr: budgetUnit * 3,
+      },
+      {
+        type: 'menu',
+        title: 'Interactive Live Food Stations & Street Chaat Bar',
+        description: 'Popular artisanal live counters with fresh chaat, artisanal mocktails, and decadent hot dessert spreads.',
+        estCostInr: budgetUnit * 5,
+      },
+      {
+        type: 'decor',
+        title: 'Statement Floral Arch & Ambient Illumination',
+        description: 'Signature photo entryway with seasonal blooms and warm uplighting that transforms the space from day to dusk.',
+        estCostInr: budgetUnit * 3,
+      },
+      {
+        type: 'entertainment',
+        title: 'High-Energy DJ & Live Percussionist Jam',
+        description: 'DJ set synchronized with live percussionist/darbuka player to get all generations dancing together.',
+        estCostInr: budgetUnit * 2,
+      },
+      {
+        type: 'activity',
+        title: 'Interactive Guest Wish Canvas & Video Booth',
+        description: 'A dedicated station where guests record 15-second heartfelt video wishes and sign an artistic canvas frame.',
+        estCostInr: budgetUnit * 1,
+      },
+      {
+        type: 'gift',
+        title: 'Artisanal Gourmet Hampers & Local Specialty',
+        description: 'Custom packaged boxes of premium dry fruits and regional sweets reflecting the culinary pride of ' + brief.city + '.',
+        estCostInr: budgetUnit * 2,
+      },
+    ];
+  }
+
+  return {
+    ideas,
+    note: tweak
+      ? `Tailored 6 personalized ideas reflecting your adjustment: "${tweak.slice(0, 80)}" for ${brief.guestCount} guests in ${brief.city}.`
+      : `Tailored celebration ideas matching your ${brief.eventType} budget and vibe.`,
+  };
+}
+
+/**
+ * Builds deterministic practical event planning answers when AI is rate-limited or offline.
+ */
+export function buildFallbackAssist(
+  question: string,
+  brief: Brief,
+  planSummary: string,
+  spentTotalInr: number
+): AssistResponse {
+  const q = question.toLowerCase();
+  const remainingInr = Math.max(0, brief.totalBudgetInr - spentTotalInr);
+
+  if (q.includes('priority') || q.includes('lock down') || q.includes('first') || q.includes('start') || q.includes('week')) {
+    return {
+      answer: `**Top Priorities for this Stage:**\n\n1. **Lock Venue & Dates:** In ${brief.city}, top venues book out months in advance. Secure the contract and ensure guest capacity (${brief.guestCount} guests) is comfortable.\n2. **Book Core Vendors:** Caterer and primary photographer should be locked immediately after the venue, as quality teams take only 1-2 events per date.\n3. **Budget Milestone:** You have ₹${remainingInr.toLocaleString('en-IN')} remaining of your ₹${brief.totalBudgetInr.toLocaleString('en-IN')} budget. Keep 10% uncommitted as your buffer reserve.\n4. **Family Alignment:** Confirm ritual timings with elders or officiants before locking vendor schedules.`,
+      followUps: [
+        `How do we negotiate vendor payment milestones safely?`,
+        `What questions should we ask the venue before paying deposit?`,
+        `How can we trim catering costs without cutting food quality?`,
+      ],
+      caveat: `Always review venue contracts for hidden electricity, generator backup, and vendor corkage charges before signing.`,
+    };
+  }
+
+  if (q.includes('decor') || q.includes('catering') || q.includes('save') || q.includes('budget') || q.includes('cost') || q.includes('optimize') || q.includes('charm')) {
+    return {
+      answer: `**Practical Budget Optimization Tips:**\n\n- **Catering Efficiency:** Limit appetizers to 4 high-demand live items instead of 8. Guests remember taste and temperature, not menu page count.\n- **Seasonal Floral Decor:** Replace imported exotic flowers with abundant local marigold, tuberose (rajnigandha), and mogra. They look grander and cost 60% less.\n- **Lighting Over Props:** Strategic amber fairy lights, warm uplights, and brass diyas create luxury atmosphere at a fraction of fabrication costs.\n- **Shared Setup:** If having multi-day functions, reuse stage backdrop framing with slight fabric and floral tweaks.`,
+      followUps: [
+        `What is the best way to track small cash expenses on event days?`,
+        `How many waiters per guest should we demand from the caterer?`,
+        `Can we bring our own sweets or desserts to save on package rate?`,
+      ],
+      caveat: `Confirm with your venue if outside catering or decorators incur royalty or mandatory vendor commission fees.`,
+    };
+  }
+
+  if (q.includes('permission') || q.includes('police') || q.includes('noise') || q.includes('sound') || q.includes('rule') || q.includes('noc')) {
+    return {
+      answer: `**Civic & Legal Permissions in ${brief.city}:**\n\n1. **Sound Curfew:** Outdoor amplified music strictly stops at 10:00 PM per Supreme Court regulations. Plan for silent disco or indoor banquet transition afterwards.\n2. **Police & Traffic NOC:** If holding a baraat procession, street rally, or over 300 guests on public access roads, obtain local police station clearance 15 days ahead.\n3. **Fire & Electrical Clearance:** Required for temporary pandals or lawn tents exceeding 500 sq meters. Ensure fire extinguishers are visible near kitchens.\n4. **PPL / IPRS Music Licenses:** Required if hiring a commercial DJ playing copyrighted music in commercial premises.`,
+      followUps: [
+        `Does the banquet hall handle sound permits or do we?`,
+        `What are the penalties for exceeding 10 PM sound curfew?`,
+        `How do we manage guest parking to avoid local traffic police towing?`,
+      ],
+      caveat: `Verify exact municipal corporation and police station guidelines in ${brief.city} as local enforcement varies.`,
+    };
+  }
+
+  if (q.includes('photograph') || q.includes('video') || q.includes('shoot')) {
+    return {
+      answer: `**Photographer Selection & Contract Rules:**\n\n- **Team Composition:** Ensure you get at least 2 candid photographers + 1 traditional stage photographer + 1 drone operator for key outdoor moments.\n- **Deliverables Timeline:** Put delivery dates in the contract (e.g. 10 preview teaser photos in 48 hours, trailer in 20 days, full raw video & edited album within 60 days).\n- **Food & Crew Care:** Include the photographer and crew in your catering headcount so they stay energized during long ritual hours.\n- **Shot List:** Give a designated family member the role of guiding the photographer to key elders and must-have group shots.`,
+      followUps: [
+        `What payment schedule is standard for Indian wedding photographers?`,
+        `Do we need raw unedited video footage in hard drive?`,
+        `How do we get great photos during rapid ritual moments?`,
+      ],
+      caveat: `Always ask to view full uncut galleries of an entire real wedding, not just curated Instagram highlights.`,
+    };
+  }
+
+  // General planning answer
+  return {
+    answer: `**Jashn Planning Guidance for "${brief.title}":**\n\n- **Focus on Experience:** For ${brief.guestCount} guests in ${brief.city}, prioritize comfortable seating, prompt food service, and clear directional signs.\n- **Financial Health:** Total budget is ₹${brief.totalBudgetInr.toLocaleString('en-IN')}, with ₹${spentTotalInr.toLocaleString('en-IN')} allocated. Ensure remaining ₹${remainingInr.toLocaleString('en-IN')} covers remaining high-impact categories.\n- **Next Concrete Action:** Review your timeline checklist, assign each upcoming milestone to one dedicated family coordinator, and re-confirm vendor arrival times.\n- **Contingency Ready:** Keep emergency contacts, safety pins, extra cash, and medical first-aid kit readily accessible in the coordinator's kit.`,
+    followUps: [
+      `What should be our top priority to lock down this week?`,
+      `How can we optimize decor & catering without losing celebration charm?`,
+      `What civic or noise permissions should we be mindful of in this city?`,
+    ],
+    caveat: `Estimates and suggestions are for guidance. Always confirm details directly with your local vendors and municipal rules.`,
   };
 }

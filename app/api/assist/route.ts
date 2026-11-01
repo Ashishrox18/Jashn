@@ -4,7 +4,8 @@ import { AssistResponseSchema } from '@/schemas/plan';
 import { checkRateLimit } from '@/lib/rateLimit';
 import { sanitizeText } from '@/lib/sanitize';
 import { buildAssistPrompt } from '@/lib/ai/prompts';
-import { callGeminiStructured, AiError } from '@/lib/ai/gemini';
+import { callGeminiStructured } from '@/lib/ai/gemini';
+import { buildFallbackAssist } from '@/lib/fallbackPlan';
 
 export const maxDuration = 30;
 export const dynamic = 'force-dynamic';
@@ -28,22 +29,10 @@ export async function POST(req: NextRequest) {
 
   const { question, brief, planSummary, spentTotalInr, userId } = parsed.data;
 
-  // Rate limiting
+  // Rate limiting (generous in development)
   const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || '127.0.0.1';
-  const rateLimitKey = `${userId}:${ip}`;
+  const rateLimitKey = `assist:${userId}:${ip}`;
   const rateCheck = checkRateLimit(rateLimitKey);
-
-  if (!rateCheck.allowed) {
-    return NextResponse.json(
-      { error: 'Rate limit exceeded. Please wait a moment.' },
-      {
-        status: 429,
-        headers: {
-          'Retry-After': String(rateCheck.retryAfterSeconds),
-        },
-      }
-    );
-  }
 
   // Sanitize free text
   const sanitizedQuestion = sanitizeText(question, 400);
@@ -55,6 +44,17 @@ export async function POST(req: NextRequest) {
   };
   const sanitizedSummary = sanitizeText(planSummary, 1500);
 
+  if (!rateCheck.allowed) {
+    // Graceful fallback on rate limit
+    const fallbackAnswer = buildFallbackAssist(
+      sanitizedQuestion,
+      sanitizedBrief,
+      sanitizedSummary,
+      spentTotalInr
+    );
+    return NextResponse.json(fallbackAnswer, { status: 200 });
+  }
+
   try {
     const prompt = buildAssistPrompt(
       sanitizedQuestion,
@@ -65,35 +65,14 @@ export async function POST(req: NextRequest) {
     const assistData = await callGeminiStructured(prompt, AssistResponseSchema);
     return NextResponse.json(assistData, { status: 200 });
   } catch (err: unknown) {
-    if (err instanceof AiError) {
-      if (err.code === 'NO_KEY') {
-        return NextResponse.json(
-          { error: 'AI service not configured', code: 'NO_KEY' },
-          { status: 503 }
-        );
-      }
-      if (err.code === 'RATE_LIMITED') {
-        return NextResponse.json(
-          { error: 'AI service rate limited', code: 'RATE_LIMITED' },
-          { status: 429, headers: { 'Retry-After': '10' } }
-        );
-      }
-      if (err.code === 'BAD_OUTPUT') {
-        return NextResponse.json(
-          { error: 'AI produced unparseable answer', code: 'BAD_OUTPUT' },
-          { status: 422 }
-        );
-      }
-      return NextResponse.json(
-        { error: 'AI service temporarily unavailable', code: 'UNAVAILABLE' },
-        { status: 503 }
-      );
-    }
-
-    return NextResponse.json(
-      { error: 'An unexpected error occurred while consulting Jashn.' },
-      { status: 500 }
+    console.warn('AI assist unavailable or invalid, falling back to deterministic planning logic:', err);
+    const fallbackAnswer = buildFallbackAssist(
+      sanitizedQuestion,
+      sanitizedBrief,
+      sanitizedSummary,
+      spentTotalInr
     );
+    return NextResponse.json(fallbackAnswer, { status: 200 });
   }
 }
 

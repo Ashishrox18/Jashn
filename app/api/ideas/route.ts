@@ -4,7 +4,8 @@ import { IdeasResponseSchema } from '@/schemas/plan';
 import { checkRateLimit } from '@/lib/rateLimit';
 import { sanitizeText } from '@/lib/sanitize';
 import { buildIdeasPrompt } from '@/lib/ai/prompts';
-import { callGeminiStructured, AiError } from '@/lib/ai/gemini';
+import { callGeminiStructured } from '@/lib/ai/gemini';
+import { buildFallbackIdeas } from '@/lib/fallbackPlan';
 
 export const maxDuration = 30;
 export const dynamic = 'force-dynamic';
@@ -28,22 +29,10 @@ export async function POST(req: NextRequest) {
 
   const { brief, tweak, userId } = parsed.data;
 
-  // Rate limiting
+  // Rate limiting (generous in development)
   const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || '127.0.0.1';
-  const rateLimitKey = `${userId}:${ip}`;
+  const rateLimitKey = `ideas:${userId}:${ip}`;
   const rateCheck = checkRateLimit(rateLimitKey);
-
-  if (!rateCheck.allowed) {
-    return NextResponse.json(
-      { error: 'Rate limit exceeded. Please wait a moment.' },
-      {
-        status: 429,
-        headers: {
-          'Retry-After': String(rateCheck.retryAfterSeconds),
-        },
-      }
-    );
-  }
 
   // Sanitize free text
   const sanitizedBrief = {
@@ -54,40 +43,20 @@ export async function POST(req: NextRequest) {
   };
   const sanitizedTweak = sanitizeText(tweak, 200);
 
+  if (!rateCheck.allowed) {
+    // Graceful fallback on rate limit
+    const fallbackIdeas = buildFallbackIdeas(sanitizedBrief, sanitizedTweak);
+    return NextResponse.json(fallbackIdeas, { status: 200 });
+  }
+
   try {
     const prompt = buildIdeasPrompt(sanitizedBrief, sanitizedTweak);
     const ideasData = await callGeminiStructured(prompt, IdeasResponseSchema);
     return NextResponse.json(ideasData, { status: 200 });
   } catch (err: unknown) {
-    if (err instanceof AiError) {
-      if (err.code === 'NO_KEY') {
-        return NextResponse.json(
-          { error: 'AI service not configured', code: 'NO_KEY' },
-          { status: 503 }
-        );
-      }
-      if (err.code === 'RATE_LIMITED') {
-        return NextResponse.json(
-          { error: 'AI service rate limited', code: 'RATE_LIMITED' },
-          { status: 429, headers: { 'Retry-After': '10' } }
-        );
-      }
-      if (err.code === 'BAD_OUTPUT') {
-        return NextResponse.json(
-          { error: 'AI produced unparseable idea data', code: 'BAD_OUTPUT' },
-          { status: 422 }
-        );
-      }
-      return NextResponse.json(
-        { error: 'AI service temporarily unavailable', code: 'UNAVAILABLE' },
-        { status: 503 }
-      );
-    }
-
-    return NextResponse.json(
-      { error: 'An unexpected error occurred while refreshing ideas.' },
-      { status: 500 }
-    );
+    console.warn('AI ideas generation unavailable or invalid, falling back to deterministic template:', err);
+    const fallbackIdeas = buildFallbackIdeas(sanitizedBrief, sanitizedTweak);
+    return NextResponse.json(fallbackIdeas, { status: 200 });
   }
 }
 

@@ -1,5 +1,5 @@
-import { buildFallbackPlan } from '@/lib/fallbackPlan';
-import { PlanResponseSchema } from '@/schemas/plan';
+import { buildFallbackPlan, buildFallbackIdeas, buildFallbackAssist } from '@/lib/fallbackPlan';
+import { PlanResponseSchema, IdeasResponseSchema, AssistResponseSchema } from '@/schemas/plan';
 import { Brief } from '@/types';
 
 describe('Fallback Plan Generator', () => {
@@ -32,6 +32,56 @@ describe('Fallback Plan Generator', () => {
     const contingency = plan.budget.find((b) => b.category === 'contingency');
     expect(contingency).toBeDefined();
     expect(contingency!.percent).toBeGreaterThanOrEqual(5);
+  });
+
+  it('generates valid fallback ideas adhering to IdeasResponseSchema', () => {
+    const brief: Brief = {
+      eventType: 'wedding',
+      title: 'Aarav & Diya Wedding',
+      eventDate: '2026-12-15',
+      city: 'Jaipur',
+      guestCount: 350,
+      totalBudgetInr: 2500000,
+      vibe: 'Royal heritage',
+      constraints: ['vegetarian_only'],
+      weddingFunctions: ['sangeet', 'ceremony', 'reception'],
+      honoreeAge: null,
+      communityKind: null,
+    };
+
+    const ideasRes = buildFallbackIdeas(brief, 'Eco-friendly sustainable zero-waste options');
+    const parsed = IdeasResponseSchema.safeParse(ideasRes);
+    expect(parsed.success).toBe(true);
+    expect(ideasRes.ideas.length).toBeGreaterThanOrEqual(4);
+    expect(ideasRes.note.length).toBeGreaterThan(0);
+  });
+
+  it('generates valid fallback assistant response adhering to AssistResponseSchema', () => {
+    const brief: Brief = {
+      eventType: 'wedding',
+      title: 'Aarav & Diya Wedding',
+      eventDate: '2026-12-15',
+      city: 'Jaipur',
+      guestCount: 350,
+      totalBudgetInr: 2500000,
+      vibe: 'Royal heritage',
+      constraints: ['vegetarian_only'],
+      weddingFunctions: ['sangeet', 'ceremony', 'reception'],
+      honoreeAge: null,
+      communityKind: null,
+    };
+
+    const assistRes = buildFallbackAssist(
+      'What should be our top priority to lock down this week?',
+      brief,
+      'Royal wedding in Jaipur',
+      500000
+    );
+
+    const parsed = AssistResponseSchema.safeParse(assistRes);
+    expect(parsed.success).toBe(true);
+    expect(assistRes.answer.length).toBeGreaterThan(20);
+    expect(assistRes.followUps.length).toBeGreaterThanOrEqual(1);
   });
 
   it('generates a valid birthday plan that adapts to honoreeAge and passes PlanResponseSchema', () => {

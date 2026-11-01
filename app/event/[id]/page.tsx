@@ -54,6 +54,7 @@ export default function EventWorkspacePage() {
     toggleTask,
     setVendorCategoryStatus,
     applyBudgetRebalance,
+    updateIdeas,
   } = useEvent(eventId);
 
   if (!isLoaded) {
@@ -211,6 +212,7 @@ export default function EventWorkspacePage() {
           <IdeasTab
             event={event}
             totalSpent={budgetSummary.totalSpent}
+            onSaveIdeas={updateIdeas}
           />
         </TabPanel>
       </div>
