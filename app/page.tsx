@@ -99,6 +99,7 @@ export default function HomePage() {
             ref={fileInputRef}
             onChange={handleFileUpload}
             accept=".json,application/json"
+            aria-label="Upload backup JSON file"
             className="hidden"
             id="backup-upload"
           />
