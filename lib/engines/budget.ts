@@ -230,7 +230,7 @@ export function lineStatus(allocated: number, spent: number): LineStatus {
  */
 export function summarize(
   allocations: Record<Category, number>,
-  spentByCategory: Record<Category, number>
+  spentByCategory: Partial<Record<Category, number>> | Record<Category, number>
 ): BudgetSummary {
   let totalAllocated = 0;
   let totalSpent = 0;
