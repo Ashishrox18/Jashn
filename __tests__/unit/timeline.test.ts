@@ -19,6 +19,10 @@ const sampleTasks: Task[] = [
 
 describe('Timeline Engine', () => {
   describe('daysUntil', () => {
+    it('throws error on invalid date string format', () => {
+      expect(() => daysUntil('invalid', '2026-11-01')).toThrow();
+    });
+
     it('calculates days correctly across months', () => {
       expect(daysUntil('2026-12-31', '2026-12-01')).toBe(30);
       expect(daysUntil('2027-01-05', '2026-12-31')).toBe(5);
@@ -100,6 +104,14 @@ describe('Timeline Engine', () => {
       const result = scheduleTasks([], '2026-12-01', '2026-01-01');
       expect(result.scheduled).toEqual([]);
       expect(result.compressed).toBe(false);
+    });
+
+    it('handles event date on or before today', () => {
+      const result = scheduleTasks(sampleTasks, '2026-11-01', '2026-11-01');
+      expect(result.scheduled.length).toBe(sampleTasks.length);
+      for (const t of result.scheduled) {
+        expect(t.dueDate).toBe('2026-11-01');
+      }
     });
   });
 

@@ -1,7 +1,11 @@
-import { buildIcs, escapeIcsText, foldLine, toIcsDate } from '@/lib/engines/ics';
+import { buildIcs, escapeIcsText, foldLine, toIcsDate, getNextDayIcsDate } from '@/lib/engines/ics';
 import { ScheduledTask } from '@/lib/engines/timeline';
 
 describe('ICS Calendar Export Engine', () => {
+  it('handles getNextDayIcsDate gracefully', () => {
+    expect(getNextDayIcsDate('2026-11-20')).toBe('20261121');
+    expect(getNextDayIcsDate('invalid')).toBe('invalid');
+  });
   const sampleTasks: ScheduledTask[] = [
     {
       id: 'task-1',

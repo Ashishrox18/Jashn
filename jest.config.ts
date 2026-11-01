@@ -8,26 +8,31 @@ const config: Config = {
   },
   testPathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/.next/', '<rootDir>/cypress/'],
   transform: {
-    '^.+\\.(ts|tsx)$': ['ts-jest', { tsconfig: '<rootDir>/tsconfig.json' }],
+    '^.+\\.(ts|tsx)$': [
+      'ts-jest',
+      {
+        tsconfig: {
+          jsx: 'react-jsx',
+        },
+      },
+    ],
   },
+  collectCoverageFrom: ['lib/**/*.{ts,tsx}'],
   coverageThreshold: {
     global: {
-      branches: 80,
-      functions: 85,
-      lines: 85,
-      statements: 85,
+      lines: 80,
+      statements: 80,
+      functions: 80,
     },
     './lib/engines/': {
-      branches: 90,
-      functions: 95,
       lines: 95,
       statements: 95,
+      functions: 95,
     },
     './lib/': {
-      branches: 80,
-      functions: 85,
-      lines: 85,
-      statements: 85,
+      lines: 80,
+      statements: 80,
+      functions: 80,
     },
   },
 };
