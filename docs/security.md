@@ -43,3 +43,4 @@ Users supply freeform text for celebration vibes, notes, questions, and tweaks. 
 - **Quota Protection**: All `localStorage.setItem` calls are wrapped in `try/catch` blocks to gracefully handle browser storage quota exhaustion and surface accessible alerts.
 - **Read & Write Validation**: Storage operations use `StoreSchema.safeParse` on both read and write. Malformed JSON or manually tampered keys in browser DevTools automatically trigger self-healing to a fresh store without crashing the application.
 - **Backup Ingestion Boundary**: The `importAll` function enforces a strict 1 MB file size ceiling before JSON parsing, rejecting oversized or corrupt payload attacks.
+

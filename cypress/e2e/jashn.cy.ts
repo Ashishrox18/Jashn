@@ -150,3 +150,4 @@ describe('Jashn End-to-End User Journeys', () => {
     cy.contains('Scale & Budget').should('be.visible');
   });
 });
+

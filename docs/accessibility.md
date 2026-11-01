@@ -69,3 +69,4 @@ Information is never conveyed using color alone (WCAG 1.4.1):
 - **Touch Target Sizes (WCAG 2.5.5)**: All interactive buttons, tabs, inputs, and links have minimum dimensions of 44 × 44 pixels (`min-h-[44px] min-w-[44px]`).
 - **Focus Indicators**: Visible `:focus-visible` outline rings (2px solid marigold accent `#B45309` / `#FBBF24` with offset) on all interactives.
 - **Prefers-Reduced-Motion**: Framer Motion transitions and SVG countdown animations automatically respect the user's OS preference (`@media (prefers-reduced-motion: reduce)`), rendering final states immediately without vestibular trigger animations.
+

@@ -57,3 +57,4 @@ export type Store = z.infer<typeof StoreSchema>;
 export type PlanRequest = z.infer<typeof PlanRequestSchema>;
 export type IdeasRequest = z.infer<typeof IdeasRequestSchema>;
 export type AssistRequest = z.infer<typeof AssistRequestSchema>;
+

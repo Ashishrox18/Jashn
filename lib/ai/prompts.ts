@@ -123,3 +123,4 @@ Output strictly JSON matching:
   "caveat": string|null (disclaimer or recommendation to verify with local authority/vendor if applicable)
 }`;
 }
+

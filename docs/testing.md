@@ -106,3 +106,4 @@ npm run lint
 # Run Cypress E2E tests (requires running dev server: npm run dev)
 npm run cypress:run
 ```
+

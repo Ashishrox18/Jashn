@@ -108,3 +108,4 @@ describe('Gemini Client', () => {
     expect(cleanJsonText(wrapped)).toBe('{"a": 1}');
   });
 });
+

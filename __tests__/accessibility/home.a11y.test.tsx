@@ -53,3 +53,4 @@ describe('Home Page Accessibility (jest-axe)', () => {
     expect(results).toHaveNoViolations();
   });
 });
+

@@ -19,3 +19,4 @@ export const AssistRequestSchema = z.object({
   spentTotalInr: z.number().min(0),
   userId: z.string().uuid(),
 });
+

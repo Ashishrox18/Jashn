@@ -79,3 +79,4 @@ describe('Budget Tab Accessibility (jest-axe)', () => {
     expect(results).toHaveNoViolations();
   });
 });
+

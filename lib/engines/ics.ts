@@ -131,3 +131,4 @@ export function buildIcs(
   const foldedLines = lines.map(foldLine);
   return foldedLines.join('\r\n') + '\r\n';
 }
+

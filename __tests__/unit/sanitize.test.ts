@@ -27,3 +27,4 @@ describe('Sanitize Utility', () => {
     expect(sanitizeText(12345)).toBe('');
   });
 });
+

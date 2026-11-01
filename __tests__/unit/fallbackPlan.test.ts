@@ -83,3 +83,4 @@ describe('Fallback Plan Generator', () => {
     expect(plan.timeline.some((t) => t.category === 'permissions')).toBe(true);
   });
 });
+

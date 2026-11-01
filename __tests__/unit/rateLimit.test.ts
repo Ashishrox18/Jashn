@@ -32,3 +32,4 @@ describe('Rate Limiter', () => {
     expect(checkRateLimit(keyB).allowed).toBe(true);
   });
 });
+

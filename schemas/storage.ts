@@ -24,3 +24,4 @@ export const StoreSchema = z.object({
   userId: z.string().uuid(),
   events: z.array(EventRecordSchema).max(10),
 });
+

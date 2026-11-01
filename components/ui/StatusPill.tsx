@@ -118,3 +118,4 @@ export function StatusPill({ type, status, label, className = '' }: StatusPillPr
     </span>
   );
 }
+

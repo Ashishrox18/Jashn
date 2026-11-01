@@ -75,3 +75,4 @@ When offline or when `GEMINI_API_KEY` is unset:
 2. **HTTP 404 Recovery**: If Google deprecates or changes the model alias, the client retries once using `GEMINI_FALLBACK_MODEL` (default: `gemini-3.1-flash-lite`).
 3. **Alternative Provider**: If `GROQ_API_KEY` is present, Groq OpenAI-compatible JSON endpoint is supported.
 4. **Repair Retry**: On JSON parse error or Zod schema validation failure, the client sends a single repair prompt before failing gracefully to the deterministic fallback plan.
+

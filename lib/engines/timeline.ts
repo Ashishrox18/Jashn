@@ -197,3 +197,4 @@ export function groupByMonth(
 
   return groups;
 }
+

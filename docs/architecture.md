@@ -67,3 +67,4 @@ Generative AI models excel at lateral ideation, cultural context synthesis, and 
 3. **Data Privacy & Ownership**: Users retain complete control over their event data. All data resides on their local machine.
 4. **Portability**: A complete JSON backup export/import feature is built-in with strict 1 MB size checks and Zod validation, enabling cross-device transfers without an account.
 5. **Resilience**: The storage layer is wrapped with `safeParse` on both read and write. Even if the user manually corrupts `localStorage` in browser DevTools, the store automatically reinitializes to a fresh valid state without crashing.
+

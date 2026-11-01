@@ -87,3 +87,4 @@ export function CountdownRing({ days, phaseName, className = '' }: CountdownRing
     </div>
   );
 }
+

@@ -47,3 +47,4 @@ export function formatRelativeDays(days: number): string {
   }
   return `${days} days to go`;
 }
+

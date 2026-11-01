@@ -179,3 +179,4 @@ export function AssistPanel({ event, totalSpent }: AssistPanelProps) {
     </Card>
   );
 }
+

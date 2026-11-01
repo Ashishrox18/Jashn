@@ -16,3 +16,4 @@ describe('Wizard Step 1 Accessibility (jest-axe)', () => {
     expect(results).toHaveNoViolations();
   });
 });
+

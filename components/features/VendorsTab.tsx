@@ -192,3 +192,4 @@ export function VendorsTab({ event, onSetVendorStatus }: VendorsTabProps) {
     </div>
   );
 }
+

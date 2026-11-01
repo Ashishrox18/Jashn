@@ -231,13 +231,22 @@ export async function callGeminiStructured<T>(
 
     // Attempt repair once
     try {
-      const repairPrompt = `${prompt}\n\nIMPORTANT: Your previous output was invalid JSON for the required schema. Ensure strict adherence to the schema, fix any syntax issues or missing fields, and return ONLY valid, raw JSON.`;
+      if (firstErr instanceof z.ZodError) {
+        console.warn('Schema validation issues:', JSON.stringify(firstErr.issues));
+      } else {
+        console.warn('First attempt error:', firstErr);
+      }
+      const repairPrompt = `${prompt}\n\nIMPORTANT: Your previous output was invalid JSON for the required schema. Fix errors: ${firstErr instanceof z.ZodError ? JSON.stringify(firstErr.issues) : 'Invalid format'}. Return ONLY valid, raw JSON.`;
       const repairedRaw = await executeAiCall(repairPrompt, options);
       const cleanedRepaired = cleanJsonText(repairedRaw);
       const parsedRepaired = JSON.parse(cleanedRepaired);
       return schema.parse(parsedRepaired);
-    } catch {
+    } catch (secondErr) {
+      if (secondErr instanceof z.ZodError) {
+        console.warn('Repair attempt also failed schema:', JSON.stringify(secondErr.issues));
+      }
       throw new AiError('BAD_OUTPUT', 'AI output failed schema validation after repair attempt');
     }
   }
 }
+

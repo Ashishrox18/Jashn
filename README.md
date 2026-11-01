@@ -234,3 +234,4 @@ Ran all test suites.
 - Multi-currency conversion for destination NRI weddings.
 - WhatsApp RSVP export integration.
 - Multi-collaborator peer-to-peer sync via WebRTC or encrypted cloud vaults.
+

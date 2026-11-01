@@ -107,3 +107,4 @@ describe('Overview Tab Accessibility (jest-axe)', () => {
     expect(results).toHaveNoViolations();
   });
 });
+

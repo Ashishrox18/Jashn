@@ -65,3 +65,4 @@ export const AssistResponseSchema = z.object({
   followUps: z.array(z.string().max(120)).max(3),
   caveat: z.string().max(200).nullable(),
 });
+

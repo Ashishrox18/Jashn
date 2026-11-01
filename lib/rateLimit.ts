@@ -60,3 +60,4 @@ export function checkRateLimit(key: string): {
 export function resetRateLimits(): void {
   storage.clear();
 }
+
