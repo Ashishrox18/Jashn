@@ -16,6 +16,8 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
+    "typeRoots": ["./node_modules/@types"],
+    "types": ["jest", "node"],
     "plugins": [
       {
         "name": "next"
@@ -26,5 +28,5 @@
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules", "cypress"]
+  "exclude": ["node_modules", "cypress", "cypress.config.ts"]
 }
