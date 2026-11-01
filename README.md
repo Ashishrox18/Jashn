@@ -4,6 +4,48 @@
 
 Jashn is a GenAI-powered event planning companion engineered for Indian weddings, birthdays, and community gatherings. Users describe their celebration once; Jashn produces an exact rupee budget, a dated milestone timeline, a vendor checklist with vetting questions, and curated inspiration—then functions as an active working planner (track spend, tick tasks, simulate budget rebalances, export to calendar, and ask context-aware questions).
 
+Services & Technologies Used
+
+🤖 Generative AI & AI Services
+
+Google Gemini API – Primary Generative AI service used to generate personalized event plans, budget recommendations, timelines, vendor vetting questions, and creative event ideas.
+
+Groq API / Llama 3.3 – Alternative LLM inference provider for fast AI responses and resilient fallback support.
+
+Google Antigravity – Used as an AI-assisted development environment for rapid prototyping, feature development, code iteration, and improving the overall application experience.
+
+💻 Application & Backend
+
+Next.js – Full-stack framework powering the web application and secure server-side API routes.
+
+TypeScript – Used for type-safe application and business logic development.
+
+Zod – Validates user inputs and AI-generated structured JSON responses.
+
+⚙️ Planning & Processing Engine
+
+Deterministic TypeScript Engines – Handle exact budget allocation, percentage normalization, timeline calculations, and calendar scheduling.
+
+RFC 5545 iCalendar Export – Generates .ics files for exporting event milestones to calendar applications.
+
+💾 Data & Storage
+
+Browser LocalStorage – Stores event plans and user progress locally.
+
+JSON Backup & Import/Export – Enables users to back up and restore their event planning data.
+
+🧪 Quality, Security & Reliability
+
+Jest – Automated unit and integration testing.
+
+Accessibility Testing – Supports WCAG 2.1 AA accessibility standards.
+
+Server-Side API Security – Keeps AI credentials protected and validates requests before processing.
+
+Rate Limiting & Input Sanitization – Helps protect the AI APIs and application from excessive or unsafe requests.
+
+Architecture Principle: AI proposes, deterministic code disposes. Generative AI drives creativity and personalization, while deterministic engines ensure accurate financial calculations and reliable calendar scheduling.
+
 ---
 
 ## The One-Sentence Product Loop
